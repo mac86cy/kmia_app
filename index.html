@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>手机APP下载页面</title>
+		<script type="text/javascript">
+			// 获取终端的相关信息
+			var Terminal = {
+				// 辨别移动终端类型
+				platform: function() {
+					var u = navigator.userAgent,
+						app = navigator.appVersion;
+					return {
+						// android终端或者uc浏览器
+						android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+						// 是否为iPhone或者QQHD浏览器
+						iPhone: u.indexOf('iPhone') > -1,
+						// 是否iPad
+						iPad: u.indexOf('iPad') > -1
+					};
+				}(),
+				// 辨别移动终端的语言：zh-cn、en-us、ko-kr、ja-jp...
+				language: (navigator.browserLanguage || navigator.language).toLowerCase()
+			}
+			var is_weixin = (function() {
+				return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1;
+			})();
+			window.onload = function() {
+				var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight; //兼容IOS，不需要的可以去掉
+				var tip = document.getElementById('weixin-tip');
+				var close = document.getElementById('close');
+				var theUrl = 'http://10.2.198.2';
+				if (Terminal.platform.android) {
+					theUrl = 'http://61.166.241.141/KMIA_APP/ump1.0.apk';
+				} else if (Terminal.platform.iPhone) {
+					theUrl = 'itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/mac86cy/kmia_app/master/kmia_app.plist';
+				}
+				if (is_weixin) {
+					tip.style.height = winHeight + 'px'; //兼容IOS弹窗整屏
+					tip.style.display = 'block';
+					close.onclick = function() {
+						tip.style.display = 'none';
+					}
+				} else {
+					location.href = theUrl;
+				}
+			}
+		</script>
+		<style type="text/css">
+			#weixin-tip {
+				display: none;
+				position: fixed;
+				left: 0;
+				top: 0;
+				background: rgba(0, 0, 0, 0.8);
+				filter: alpha(opacity=80);
+				width: 100%;
+				height: 100%;
+				z-index: 100;
+			}
+			
+			#weixin-tip p {
+				text-align: center;
+				margin-top: 10%;
+				padding: 0 5%;
+				position: relative;
+				width: 100%;
+				height: 100%
+			}
+			
+			#weixin-tip .close {
+				color: #fff;
+				padding: 5px;
+				font: bold 20px/24px simsun;
+				text-shadow: 0 1px 0 #ddd;
+				position: absolute;
+				top: 0;
+				left: 5%;
+			}
+			
+			img {
+				max-width: 88%;
+				height: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="weixin-tip">
+			<p>
+				<img src="live_weixin.png" alt="微信扫描打开APP下载链接提示代码优化" alt="微信打开" />
+				<span id="close" title="关闭" class="close">X</span>
+			</p>
+		</div>
+	</body>
+
+</html>
